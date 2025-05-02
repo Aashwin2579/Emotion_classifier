@@ -1,0 +1,14 @@
+import os
+
+@st.cache_resource
+def load_models():
+    if not os.path.exists("model/model.pkl") or not os.path.exists("model/tokenizer.pkl"):
+        st.error("❌ Model files not found. Please run `train_model.py` first.")
+        st.stop()
+
+    model = joblib.load('model/model.pkl')
+    vectorizer = joblib.load('model/tokenizer.pkl')
+    emotion_classifier = pipeline("text-classification",
+                                  model="finiteautomata/bertweet-base-emotion-analysis",
+                                  top_k=None)
+    return model, vectorizer, emotion_classifier
